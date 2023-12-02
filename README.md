@@ -10,11 +10,11 @@
    
 ## How to Run
 
-Execute the following command in the terminal:
-
-```bash
-python app.py
-```markdown
+   Execute the following command in the terminal:
+   
+   ```bash
+   python app.py
+   ```
 
 ## File Structure
 
