@@ -6,18 +6,16 @@
 
    ```bash
    pip install flask opencv-python mediapipe
-
+   ```
+   
 ## How to Run
 
 Execute the following command in the terminal:
 
 ```bash
 python app.py
-
-
-### File Structure
-
 ```markdown
+
 ## File Structure
 
 - **app.py**: Contains the Flask web application and integrates hand tracking to overlay a virtual accessory (watch) on the user's hand in real-time.
