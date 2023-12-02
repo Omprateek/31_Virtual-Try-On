@@ -1,0 +1,158 @@
+<!-- Update templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Try-On</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tryon-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+            border: 5px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .instruction {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand,
+        .navbar-text {
+            color: #fff;
+        }
+
+        .fullscreen-button {
+            display: block;
+            margin: 10px auto;
+            background-color: #959896;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .fullscreen-button:hover {
+            background-color: #202020;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .description {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            display: block;
+            margin: 10px auto;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Virtual Try-On</a>
+    </nav>
+    <div class="container">
+        <h1 class="title" id="pageTitle">Virtual Try-On Experience</h1>
+        <p class="description" id="pageDescription">Try on accessories in real-time with our Virtual Try-On feature!</p>
+
+        <img src="{{ url_for('video_feed') }}" alt="Virtual Try-On" class="tryon-image">
+        <p class="instruction">Move your hand to see the virtual try-on in action!</p>
+    </div>
+
+
+    <button class="fullscreen-button" onclick="toggleFullscreen()" id="tryOnButton">Full Screen</button>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        function toggleFullscreen() {
+            const elem = document.documentElement;
+
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { /* Firefox */
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { /* Firefox */
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE/Edge */
+                    document.msExitFullscreen();
+                }
+            }
+        }
+        // GSAP animation for fading in the Virtual Try-On button
+        gsap.from('#tryOnButton', { opacity: 0, duration: 1, delay: 1 });
+
+        gsap.from('#pageTitle', { opacity: 0, y: -50, duration: 1, delay: 0.5 });
+        gsap.from('#pageDescription', { opacity: 0, y: -30, duration: 1, delay: 1 });
+
+
+    </script>
+
+
+</body>
+
+</html>
