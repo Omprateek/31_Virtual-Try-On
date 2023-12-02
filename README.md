@@ -7,10 +7,6 @@
    ```bash
    pip install flask opencv-python mediapipe
 
-
-### How to Run
-
-```markdown
 ## How to Run
 
 Execute the following command in the terminal:
