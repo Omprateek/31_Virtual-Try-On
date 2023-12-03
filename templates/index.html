@@ -15,6 +15,7 @@
 
         .container {
             margin-top: 50px;
+            display: flex;
         }
 
         .header {
@@ -38,8 +39,6 @@
             margin-bottom: 20px;
         }
 
-
-
         .navbar {
             background-color: #343a40;
         }
@@ -53,6 +52,19 @@
             display: block;
             margin: 10px auto;
             background-color: #959896;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button {
+            display: block;
+            margin: 10px auto;
+            background-color: #d14a40;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -77,41 +89,115 @@
             margin-bottom: 20px;
         }
 
-        .action-button {
-            display: block;
-            margin: 10px auto;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
+        .tryon-container {
+            position: relative;
         }
 
-        .action-button:hover {
-            background-color: #0056b3;
+        .tryon-container .action-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
+
+        .hidden{
+            display: none;
+        }
+
+        .opac{
+            opacity: 0.4;
+        }
+
+        /* Add these styles to your existing styles */
+        .content-wrapper {
+            float: left;
+            width: 70%; /* Adjust the width as needed */
+            margin-right: 100px;
+        }
+
+        .picture-buttons {
+        float: right;
+        width: 30%; /* Adjust the width as needed */
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .picture-button {
+        width: 150px; /* Adjust the size of the picture buttons */
+        height: 150px;
+        margin: 20px 0; /* Add margin for spacing */
+        margin-bottom: 10px;
+        padding: 15px; /* Add padding for additional spacing */
+        display: flex; /* Use flex to center the image vertically and horizontally */
+        flex-direction: column; /* Display buttons in a column */
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%; /* Make it circular */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .picture-button img {
+        max-width: 100%; /* Ensure the image doesn't exceed the button size */
+        max-height: 100%;
+        border-radius: 50%; /* Make it circular */
+        transition: transform 0.3s ease;
+    }
+
+    .picture-button:hover {
+        transform: scale(1.1); /* Add a slight scale effect on hover */
+    }
+
+    /* Add these styles to adjust the position of buttons */
+    .left {
+        display: flex;
+        flex-direction: column; /* Display buttons in a column */
+        align-items: center;
+    }
+
+    .right {
+        display: flex;
+        flex-direction: column; /* Display buttons in a column */
+        align-items: center;
+    }
+
     </style>
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#">Virtual Try-On</a>
     </nav>
+    
     <div class="container">
-        <h1 class="title" id="pageTitle">Virtual Try-On Experience</h1>
-        <p class="description" id="pageDescription">Try on accessories in real-time with our Virtual Try-On feature!</p>
+        <!-- Wrap the content to shift to the left -->
+        <div class="content-wrapper">
+            <h1 class="title" id="pageTitle">Virtual Try-On Experience</h1>
+            <p class="description" id="pageDescription">Try on accessories in real-time with our Virtual Try-On
+                feature!</p>
+            <div class="tryon-container">
+                <img src="{{ url_for('static', filename='WatchGif1.gif') }}" alt="Virtual Try-On" class="tryon-image"
+                    id="tryOnImage" height="450px" width="1000px">
+                <button class="action-button fullscreen-button hidden" onclick="toggleCamera()">Start Your Try-On
+                </button>
+            </div>
+            <p class="instruction">Move your hand to see the virtual try-on in action!</p>
+            <div class="container">
+                <button class="fullscreen-button" onclick="toggleFullscreen()" id="tryOnButton">Full Screen</button>
+                <button class="fullscreen-button" onclick="toggleCamera()" id="cameraButton">Start Camera</button>
+            </div>
+        </div>
 
-        <img src="{{ url_for('video_feed') }}" alt="Virtual Try-On" class="tryon-image">
-        <p class="instruction">Move your hand to see the virtual try-on in action!</p>
+        <!-- Add a div for the picture buttons -->
+        <div class="picture-buttons">
+            <!-- Add your picture buttons here -->
+                    <button><img src="{{ url_for('static', filename='Watch1.png') }}" alt="Button 1" class="picture-button"></button>
+                    <button><img src="{{ url_for('static', filename='Watch2.jpeg') }}" alt="Button 2" class="picture-button"></button>
+                    <button><img src="{{ url_for('static', filename='Watch3.png') }}" alt="Button 3" class="picture-button"></button>
+        </div>
     </div>
-
-
-    <button class="fullscreen-button" onclick="toggleFullscreen()" id="tryOnButton">Full Screen</button>
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
         integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
@@ -143,9 +229,57 @@
                 }
             }
         }
+        let videoStream = null;
+    let elem = document.getElementById("cameraButton");
+
+    function toggleCamera() {
+        const videoElement = document.querySelector('.tryon-image');
+        let ele = document.getElementById("cameraButton");
+        let image = document.getElementById("tryOnImage");
+
+        if (ele.innerHTML == "Start Camera") {
+            // Turn on the camera
+            image.src = "{{ url_for('video_feed') }}";
+            ele.innerHTML = "Stop Camera";
+
+            // Remove event listeners and reset opacity
+            image.removeEventListener('mouseenter', handleImageMouseEnter);
+            image.removeEventListener('mouseleave', handleImageMouseLeave);
+            gsap.to('.tryon-image', { opacity: 1, duration: 0.5 }); // Reset opacity
+            document.querySelector('.action-button').classList.add('hidden');
+            console.log("Started");
+        } else {
+            // Turn off the camera
+            image.src = "{{ url_for('static', filename='WatchGif1.gif') }}";
+            ele.innerHTML = "Start Camera";
+            // Restore event listeners
+            image.addEventListener('mouseenter', handleImageMouseEnter);
+            image.addEventListener('mouseleave', handleImageMouseLeave);
+            console.log("Stopped");
+        }
+    }
+
+    // Function to handle image mouse enter
+    function handleImageMouseEnter() {
+        document.querySelector('.action-button').classList.remove('hidden');
+        gsap.to('.tryon-image', { opacity: 0.4, duration: 0.5 });
+    }
+
+    // Function to handle image mouse leave
+    function handleImageMouseLeave() {
+        document.querySelector('.action-button').classList.add('hidden');
+        gsap.to('.tryon-image', { opacity: 1, duration: 0.5 });
+    }
+
+    // Add initial event listeners for image hover effect
+    document.querySelector('.tryon-image').addEventListener('mouseenter', handleImageMouseEnter);
+    document.querySelector('.tryon-image').addEventListener('mouseleave', handleImageMouseLeave);
+    document.querySelector('.action-button').addEventListener('mouseenter', handleImageMouseEnter);
+    document.querySelector('.action-button').addEventListener('mouseleave', handleImageMouseLeave);
+
         // GSAP animation for fading in the Virtual Try-On button
         gsap.from('#tryOnButton', { opacity: 0, duration: 1, delay: 1 });
-
+        gsap.from('#cameraButton', { opacity: 0, duration: 1, delay: 1 });
         gsap.from('#pageTitle', { opacity: 0, y: -50, duration: 1, delay: 0.5 });
         gsap.from('#pageDescription', { opacity: 0, y: -30, duration: 1, delay: 1 });
 
