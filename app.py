@@ -11,7 +11,7 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
 
 # Load the watch image with a transparent background (PNG format)
-watch_image = cv2.imread('./assests/Watch3.png', cv2.IMREAD_UNCHANGED)
+watch_image = cv2.imread('./static/Watch3.png', cv2.IMREAD_UNCHANGED)
 
 # Initialize VideoCapture
 cap = cv2.VideoCapture(0)
